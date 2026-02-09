@@ -22,7 +22,7 @@ class MoELayer(nn.Module):
         ])
 
     def forward(self, x):
-        # x shape: (batch_size, seq_len, input_dim) -> (B*T, D)
+        # x shape: (batch_size, seq_len, input_dim) -> (B*s, D)
         original_shape = x.shape
         x = x.reshape(-1, original_shape[-1])
         
@@ -72,3 +72,16 @@ class MoELayer(nn.Module):
             pass 
 
         return final_output.reshape(original_shape)
+if __name__ == "__main__":
+    # 测试 MoE 层
+    batch_size = 2
+    seq_len = 4
+    input_dim = 8
+    hidden_dim = 16
+    output_dim = 8
+    num_experts = 3
+
+    moe_layer = MoELayer(input_dim, hidden_dim, output_dim, num_experts)
+    x = torch.randn(batch_size, seq_len, input_dim)
+    output = moe_layer(x)
+    print("Output shape:", output.shape)
